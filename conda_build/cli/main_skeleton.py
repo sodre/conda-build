@@ -10,6 +10,7 @@ import importlib
 import logging
 import os
 import pkgutil
+import pkg_resources
 import sys
 
 from conda_build.conda_interface import ArgumentParser
@@ -43,6 +44,11 @@ options available.
         if skeleton.startswith("_"):
             continue
         module = importlib.import_module("conda_build.skeletons." + skeleton)
+        module.add_parser(repos)
+
+    # Load external skeleton plugins
+    for entry_point in pkg_resources.iter_entry_points('conda_build.skeletons'):
+        module = entry_point.load()
         module.add_parser(repos)
 
     args = p.parse_args(args)

@@ -241,11 +241,17 @@ def list_skeletons():
 
     The returned list is generally the names of supported repositories (pypi, cran, etc.)"""
     import pkgutil
+    import pkg_resources
     modules = pkgutil.iter_modules(['conda_build/skeletons'])
     files = []
     for _, name, _ in modules:
         if not name.startswith("_"):
             files.append(name)
+
+    # Load external skeleton plugins
+    for entry_point in pkg_resources.iter_entry_points('conda_build.skeletons'):
+        files.append(entry_point.name)
+
     return files
 
 

@@ -33,6 +33,7 @@ repo_packages = [('', 'pypi', 'pip', '8.1.2'),
                  ('perl', 'cpan', 'Moo', ''),
                  ('', 'rpm', 'libX11-devel', ''),
                  # ('lua', luarocks', 'LuaSocket', ''),
+                 ('test', 'test', 'test', ''),
                  ]
 
 
@@ -337,6 +338,11 @@ def test_pypi_version_sorting(testing_workdir, testing_config):
 def test_list_skeletons():
     skeletons = api.list_skeletons()
     assert set(skeletons) == set(['pypi', 'cran', 'cpan', 'luarocks', 'rpm'])
+
+
+def test_list_skeletons_with_plugin():
+    skeletons = api.list_skeletons()
+    assert 'test' in set(skeletons)
 
 
 def test_pypi_with_entry_points(testing_workdir):
